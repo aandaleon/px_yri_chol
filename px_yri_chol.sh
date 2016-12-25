@@ -2,9 +2,18 @@
 
 #QCStep0:
 plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered --check-sex --out QCStep0
-
+  ##Creates a .sexcheck file with F values (0 = female, 1 = male), resulting in 4 either inconclusive or missing altogether
+  ###2379855 variants loaded from .bim file.
+  ###1264 people (446 males, 818 females) loaded from .fam.
+  ###Warning: 2330 het. haploid genotypes present
+  ###Total genotyping rate is 0.991948.
+  ###2379855 variants and 1264 people pass filters and QC.
+  ###--check-sex: 35847 Xchr and 0 Ychr variant(s) scanned, 4 problems detected.
+  ###Report written to QCStep0.sexcheck
+  
 #QCStep1:
 plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --missing --out /home/angela/QCStep1 --check-sex
+  ##Creates two files: .imiss (individual) and .lmiss (SNP/locus) that details missingness in data
 
 #QCStep2:
 plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --geno 0.01 --make-bed --out QCStep2
