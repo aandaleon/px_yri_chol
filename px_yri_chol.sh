@@ -12,11 +12,17 @@ plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoru
   ###Report written to QCStep0.sexcheck
   
 #QCStep1:
-plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --missing --out /home/angela/QCStep1 --check-sex
+plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --missing --out /home/angela/QCStep1
   ##Creates two files: .imiss (individual) and .lmiss (SNP/locus) that details missingness in data
+  ###1581500 variants loaded from .bim file.
+  ###1264 people (446 males, 818 females) loaded from .fam.
+  ###Total genotyping rate is 0.998341
+  ###--missing: Sample missing data report written to /home/angela/QCStep1.imiss, and variant-based missing data report written to /home/angela/QCStep1.lmiss.
+  ###1581500 variants and 1264 people pass filters and QC.
 
 #QCStep2:
 plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --geno 0.01 --make-bed --out QCStep2
+  ##Recalculate individual call rates after removing SNPS with call rates <99%, and making a new set of binary files
 
 #QCStep3:
 plink --bfile home/angela/QCStep2 --missing --out QCStep3
@@ -46,4 +52,4 @@ plink --bfile /home/angela/QCStep5/QCStep5d/QCStep5d --het --extract /home/angel
 #QCStep5f: make a new set of bfiles w/o >0.25 relatedness or +/-3 SD outliers
 plink --bfile /home/angela/QCStep5/QCStep5d/QCStep5d --extract /home/angela/QCStep5/QCStep5c/QCStep5c.prune.in --remove /home/angela/QCStep5/QCStep5e/QCStep5e.txt --make-bed --out /home/angela/QCStep5/QCStep5f/QCStep5f
 
-#NOTE: LOOK AT LOG FILES AND COPE RESULTS CAUSE YOU DIDN'T WRITE THIS DOWN ORIGINALLY
+#NOTE: LOOK AT LOG FILES AND COPY RESULTS CAUSE YOU DIDN'T WRITE THIS DOWN ORIGINALLY
