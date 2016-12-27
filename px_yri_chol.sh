@@ -111,10 +111,28 @@ plink --bfile /home/angela/QC/QCStep2/QCStep2a --remove /home/angela/QC/QCStep5/
   ###--make-bed to /home/angela/QC/QCStep5/QCStep5d/QCStep5d.bed + /home/angela/QC/QCStep5/QCStep5d/QCStep5d.bim + /home/angela/QC/QCStep5/QCStep5d/QCStep5d.fam ... done.
 
 #QCStep5e:
+plink --bfile /home/angela/QC/QCStep5/QCStep5d/QCStep5d --extract /home/angela/QC/QCStep5/QCStep5a/QCStep5a.prune.in --remove /home/angela/QC/QCStep5/QCStep5d/related.to.remove.txt --out /home/angela/QC/QCStep5/QCStep5e/QCStep5e
+  ##Combines the last few steps and checks heterozygosity
+  ##Create a list of individuals with more than 3 standard deviations from the mean
+  ###1522836 variants loaded from .bim file.
+  ##1189 people (408 males, 781 females) loaded from .fam.
+  ###--extract: 126827 variants remaining.
+  ###Total genotyping rate is 0.999137.
+  ###126827 variants and 1189 people pass filters and QC.
+  ###--het: 126827 variants scanned, report written to /home/angela/QCStep5/QCStep5e/QCStep5e.het .
 
 #At this point, continue to run analyses from https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/TCS_GWAS_QC/03_GWAS_QC_plots.html
 
-#QCStep5f: make a new set of bfiles w/o >0.25 relatedness or +/-3 SD outliers
+#QCStep5f: 
+plink --bfile /home/angela/QC/QCStep5/QCStep5d/QCStep5d --extract /home/angela/QC/QCStep5/QCStep5a/QCStep5a.prune.in --remove /home/angela/QC/QCStep5/QCStep5d/3SD.txt --make-bed --out /home/angela/QC/QCStep5/QCStep5f/QCStep5f
+  ##Makes a new set of bfiles w/o >0.25 relatedness or +/-3 SD outliers
+  ###1522836 variants loaded from .bim file.
+  ###1189 people (408 males, 781 females) loaded from .fam.
+  ###--extract: 52694 variants remaining.
+  ###--remove: 1184 people remaining.
+  ###Total genotyping rate is 0.999137.
+  ###126827 variants and 1184 people pass filters and QC.
+  ###--make-bed to /home/angela/QCStep5/QCStep5f/QCStep5f.bed + /home/angela/QCStep5/QCStep5f/QCStep5f.bim + /home/angela/QCStep5/QCStep5f/QCStep5f.fam ... done.
 
 #NOTE: LOOK AT LOG FILES AND COPY RESULTS CAUSE YOU DIDN'T WRITE THIS DOWN ORIGINALLY
 
