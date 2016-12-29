@@ -141,13 +141,12 @@ plink --bfile /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19
   ###1499880 variants loaded from .bim file.
   ###391 people (197 males, 194 females) loaded from .fam.
   ###--extract: 11515 variants remaining.
-  ###Total genotyping rate is 0.963917.
   ###11515 variants and 391 people pass filters and QC.
   ###Among remaining phenotypes, 0 are cases and 391 are controls.
   ###--make-bed to /home/angela/QC/QCStep6/QCStep6c.bed + /home/angela/QC/QCStep6/QCStep6c.bim + /home/angela/QC?QCStep6/QCStep6c.fam ... done.
 
 #QCStep6c:
-plink --bfile /home/angela/QC/QCStep5/QCStep5f/QCStep5f --bmerge /home/angela/QC/QCStep6/QCStepb/QCStep6b.bed /home/angela/QC/QCStep6/QCStepb/QCStep6b.bim /home/angela/QC/QCStep6/QCStepb/QCStep6b.fam --make-bed --out /home/angela/QC/QCStep6c/QCStep6c
+plink --bfile /home/angela/QC/QCStep5/QCStep5f/QCStep5f --bmerge /home/angela/QC/QCStep6/QCStep6b/QCStep6b.bed /home/angela/QC/QCStep6/QCStepb/QCStep6b.bim /home/angela/QC/QCStep6/QCStepb/QCStep6b.fam --make-bed --out /home/angela/QC/QCStep6c/QCStep6c
   ##After excluding, try merging HAPMAP and study cohort again
   ###1184 people loaded from /home/angela/QC/QCStep5/QCStep5f/QCStep5f.fam.
   ###391 people to be merged from /home/angela/QC/QCStep6/QCStep6b/QCStep6b.fam.
@@ -155,7 +154,23 @@ plink --bfile /home/angela/QC/QCStep5/QCStep5f/QCStep5f --bmerge /home/angela/QC
   ###Warning: Multiple chromosomes seen for variant...
   ###Warning: Multiple positions seen for variant...
   ###126827 markers loaded from /home/angela/QC/QCStep5/QCStep5f/QCStep5f.bim.
-  ###1497638 markers to be merged from /home/angela/QC/QCStep6/QCStep6b/QCStep6b.bim.
-  ###Of these, 1474687 are new, while 22951 are present in the base dataset.
-  ###Error: 11515 variants with 3+ alleles present.
+  ###1488465 markers to be merged from /home/angela/QC/QCStep6/QCStep6b/QCStep6b.bim.
+  ###Of these, 1476929 are new, while 11436 are present in the base dataset.
+  ###1 more multple-position warning: see log file.
+  ###Warning: Variants '...' and '...' have the same position
+  ###Performing single-pass merge (1575 people, 1529623 variants).
+  ###8901 more same-position warnings: see log file.
+  ###Merged fileset written to /home/angela/QC/QCStep6/QCStep6c/QCStep6c.bed + /home/angela/QC/QCStep6/QCStep6c/QCStep6c.bim + /home/angela/QC/QCStep6/QCStep6c/QCStep6c.fam .
+  ###1529623 variants loaded from .bim file.
+  ###1575 people (602 males, 973 females) loaded from .fam.
+  ###391 phenotype values loaded from .fam.
+  ###Warning: 1676 het. haploid genotypes present (see /home/angela/QC/QCStep6/QCStep6c/QCStep6c.hh ); many commands treat these as missing.
+  ###Total genotyping rate is 0.230982.
+  ###1529623 variants and 1575 people pass filters and QC.
+  ###Among remaining phenotypes, 0 are cases and 391 are controls.  (1184 phenotypes are missing.)
+  ###--make-bed to /home/angela/QC/QCStep6/QCStep6c/QCStep6c.bed + /home/angela/QC/QCStep6/QCStep6c/QCStep6c.bim + /home/angela/QC/QCStep6/QCStep6c/QCStep6c ... done.
+
+#QCStep6d:
+
+  ##Filter merged file to SNPs with >90% genotypes
 
