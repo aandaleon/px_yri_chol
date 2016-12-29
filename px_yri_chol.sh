@@ -171,6 +171,63 @@ plink --bfile /home/angela/QC/QCStep5/QCStep5f/QCStep5f --bmerge /home/angela/QC
   ###--make-bed to /home/angela/QC/QCStep6/QCStep6c/QCStep6c.bed + /home/angela/QC/QCStep6/QCStep6c/QCStep6c.bim + /home/angela/QC/QCStep6/QCStep6c/QCStep6c ... done.
 
 #QCStep6d:
-
+plink --bfile /home/angela/QC/QCStep6/QCStep6c/QCStep6c --geno 0.2 --maf 0.05 --make-bed --out /home/angela/QC/QCStep6/QCStep6d/QCStep6d
   ##Filter merged file to SNPs with >90% genotypes
+  ###1529623 variants loaded from .bim file.
+  ###1575 people (602 males, 973 females) loaded from .fam.
+  ###391 phenotype values loaded from .fam.
+  ###Warning: 1676 het. haploid genotypes present (see /home/angela/try/try6d.hh ); many commands treat these as missing.
+  ###Total genotyping rate is 0.230982.
+  ###1518187 variants removed due to missing genotype data (--geno).
+  ###17 variants removed due to minor allele threshold(s)
+  ###(--maf/--max-maf/--mac/--max-mac).
+  ###11419 variants and 1575 people pass filters and QC.
+  ###--make-bed to /home/angela/QC/QCStep6/QCStep6d/QCStep6d.bed + /home/angela/QC/QCStep6/QCStep6d/QCStep6d.bim + /home/angela/QC/QCStep6/QCStep6d/QCStep6d.fam ... done.
 
+#QCStep6e:
+plink --bfile /home/angela/QC/QCStep6/QCStep6d/QCStep6d --indep-pairwise 50 5 0.3 --recode --out /home/angela/QC/QCStep6/QCStep6e/QCStep6e
+  ##Reduces number of points for plotting in a principal components analysis, and creating .map and .ped files for smartpca
+  ###11419 variants loaded from .bim file.
+  ###1575 people (602 males, 973 females) loaded from .fam.
+  ###391 phenotype values loaded from .fam.
+  ###Total genotyping rate is 0.990962.
+  ###11419 variants and 1575 people pass filters and QC.
+  ###Among remaining phenotypes, 0 are cases and 391 are controls.  (1184 phenotypes are missing.)
+  ###--recode to /home/angela/QC/QCStep6/QCStep6e/QCStep6e.ped + /home/angela/QC/QCStep6/QCStep6e/QCStep6e.map ... done.
+  ###Pruned 53 variants from chromosome 1, leaving 860.
+  ###Pruned 29 variants from chromosome 2, leaving 877.
+  ###Pruned 24 variants from chromosome 3, leaving 754.
+  ###Pruned 26 variants from chromosome 4, leaving 648.
+  ###Pruned 22 variants from chromosome 5, leaving 651.
+  ###Pruned 35 variants from chromosome 6, leaving 719.
+  ###Pruned 26 variants from chromosome 7, leaving 590.
+  ###Pruned 16 variants from chromosome 8, leaving 590.
+  ###Pruned 20 variants from chromosome 9, leaving 482.
+  ###Pruned 27 variants from chromosome 10, leaving 585.
+  ###Pruned 17 variants from chromosome 11, leaving 597.
+  ###Pruned 30 variants from chromosome 12, leaving 549.
+  ###Pruned 17 variants from chromosome 13, leaving 447.
+  ###Pruned 6 variants from chromosome 14, leaving 394.
+  ###Pruned 12 variants from chromosome 15, leaving 337.
+  ###Pruned 6 variants from chromosome 16, leaving 368.
+  ###Pruned 20 variants from chromosome 17, leaving 333.
+  ###Pruned 10 variants from chromosome 18, leaving 355.
+  ###Pruned 14 variants from chromosome 19, leaving 232.
+  ###Pruned 10 variants from chromosome 20, leaving 301.
+  ###Pruned 7 variants from chromosome 21, leaving 163.
+  ###Pruned 2 variants from chromosome 22, leaving 158.
+  ###Pruning complete.  429 of 11419 variants removed.
+  ###Marker lists written to /home/angela/QC/QCStep6/QCStep6e/QCStep6e.prune.in and /home/angela/QC/QCStep6/QCStep6e/QCStep6e.prune.out .
+
+#QCStep6f:
+perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/angela/QCStep6/QCStep6e/QCStep6e 0 > /home/angela/QCStep6/QCStep6f/QCStep6f
+  ##Make parfile for smartpca
+  ##User: edit path files in parfile
+  
+#QCStep6g:
+awk '{print $1,$2,$3,$4,$5,1}' /home/angela/QC/QCStep6/QCStep6d/QCStep6d.fam > /home/angela/QCStep6/QCStep6e/QCStep6e.fam
+
+#QCStep6h
+module load eigensoft/5.0.1
+qsub run_smartpca.sh
+  #run PCA
