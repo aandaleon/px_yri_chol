@@ -1,0 +1,5 @@
+Sections:
+
+What is a GWAS?
+Definitions
+Introduction to example (px_yri_chol)
