@@ -1,4 +1,4 @@
-#NOTE: EDIT FILE NAMES PATHS SO THEY ARE CURRENTLY ACCURATE
+#Based on https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/TCS_GWAS_QC/02_plink_QC.sh
   
 #QCStep1:
 plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --missing --out /home/angela/QC/QCStep1/QCStep1
@@ -185,7 +185,7 @@ plink --bfile /home/angela/QC/QCStep6/QCStep6c/QCStep6c --geno 0.2 --maf 0.05 --
 
 #QCStep6e:
 plink --bfile /home/angela/QC/QCStep6/QCStep6d/QCStep6d --indep-pairwise 50 5 0.3 --recode --out /home/angela/QC/QCStep6/QCStep6e/QCStep6e
-  ##Reduces number of points for plotting in a principal components analysis, and creating .map and .ped files for smartpca
+  ##Reduces number of points for plotting in a principal components analysis, and creaties .map and .ped files for smartpca
   ###11419 variants loaded from .bim file.
   ###1575 people (602 males, 973 females) loaded from .fam.
   ###391 phenotype values loaded from .fam.
