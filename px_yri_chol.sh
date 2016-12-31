@@ -6,25 +6,25 @@ plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoru
   ###1581500 variants loaded from .bim file.
   ###1264 people (446 males, 818 females) loaded from .fam.
   ###Total genotyping rate is 0.998341
-  ###--missing: Sample missing data report written to /home/angela/QCStep1.imiss, and variant-based missing data report written to /home/angela/QCStep1.lmiss.
+  ###--missing: Sample missing data report written to /home/angela/QC/QCStep1/QCStep1.imiss, and variant-based missing data report written to /home/angela/QC/QCStep1/Step1.lmiss.
   ###1581500 variants and 1264 people pass filters and QC.
 
 #QCStep2:
-plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --geno 0.01 --make-bed --out bfile /home/angela/QC/QCStep2/QCStep2a
+plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --geno 0.01 --make-bed --out bfile /home/angela/QC/QCStep2/QCStep2
   ##Recalculates individual call rates after removing SNPs with call rates <99% and creates new set of binary files
-  ###1522836 variants loaded from .bim file.
+  ###1581500 variants loaded from .bim file.
   ###1264 people (446 males, 818 females) loaded from .fam.
   ###58664 variants removed due to missing genoype data (--geno).
-  ###--make-bed to QCStep2.bed + QCStep2.bim + QCStep2.fam ... done
+  ###--make-bed to /home/angela/QC/QCStep2/QCStep2.bed + /home/angela/QC/QCStep2/QCStep2.bim + /home/angela/QC/QCStep2/QCStep2.fam ... done
   ###1522836 variants and 1264 people pass filters and QC.
 
 #QCStep3:
-plink --bfile /home/angela/QCStep2/QCStep2 --missing --out /home/angela/QC/QCStep3/QCStep3
+plink --bfile /home/angela/QC/QCStep2/QCStep2 --missing --out /home/angela/QC/QCStep3/QCStep3
   ##Creates two files: .imiss (individual) and .lmiss (SNP/locus) that details missingness in data
   ###1522836 variants loaded from .bim file.
   ###1264 people (446 males, 818 females) loaded from .fam.
   ###Total genotyping rate is 0.999244.
-  ###--missing: Sample missing data report written to QCStep3.imiss, and variant-based missing data report written to QCStep3.lmiss.
+  ###--missing: Sample missing data report written to /home/angela/QC/QCStep3/QCStep3.imiss, and variant-based missing data report written to /home/angela/QC/QCStep3/QCStep3.lmiss.
 
 #QCStep4:
 plink --bfile /home/angela/QC/QCStep2/QCStep2 --hardy  --out /home/angela/QC/QCStep4/QCStep4
@@ -32,7 +32,7 @@ plink --bfile /home/angela/QC/QCStep2/QCStep2 --hardy  --out /home/angela/QC/QCS
   ###1522836 variants loaded from .bim file.
   ###1264 people (446 males, 818 females) loaded from .fam.
   ###Total genotyping rate is 0.999244.
-  ###--hardy: Writing Hardy-Weinberg report (founders only) to /home/angela/QCStep4/QCStep4.hwe ... done.
+  ###--hardy: Writing Hardy-Weinberg report (founders only) to /home/angela/QC/QCStep4/QCStep4.hwe ... done.
 
 #QCStep5a:
 plink --bfile /home/angela/QC/QCStep2/QCStep2 --indep-pairwise 50 5 0.3 --out /home/angela/QC/QCStep5/QCStep5a/QCStep5a
@@ -70,8 +70,8 @@ plink --bfile /home/angela/QC/QCStep2/QCStep2 --indep-pairwise 50 5 0.3 --out /h
 #QCStep5b:
 plink --bfile /home/angela/QC/QCStep2/QCStep2 --extract /home/angela/QC/QCStep5/QCStep5a/QCStep5a.prune.in --genome --min 0.25 --out /home/angela/QC/QCStep5/QCStep5b/QCStep5b
   ##Extracts the SNPs from QCStep5a into a .genome file using an identity-by-descent threshold of 0.25 relatedness for plotting
-  ##0.25 was used due to the high degree of relatedness within the cohort.
-  ##User: create a list of individuals to remove due to relatedness
+  ##0.25 was used as the threshold due to the high degree of relatedness within the cohort.
+  ##User: create a list of individuals to remove due to relatedness (in this example, related.to.remove.txt)
   ###1522836 variants loaded from .bim file.
   ###1264 people (446 males, 818 females) loaded from .fam.
   ###--extract: 126827 variants remaining.
@@ -89,25 +89,24 @@ plink --bfile /home/angela/QC/QCStep2/QCStep2 --het --out /home/angela/QC/QCStep
   ###1264 people (446 males, 818 females) loaded from .fam.
   ###Total genotyping rate is 0.999244.
   ###1522836 variants and 1264 people pass filters and QC.
-  ###--het: 1522836 variants scanned, report written to /home/angela/QCStep5/QCStep5c/.het .
+  ###--het: 1522836 variants scanned, report written to /home/angela/QCStep5/QCStep5c/QCStep5c.het
 
 #QCStep5d:
-plink --bfile /home/angela/QC/QCStep2/QCStep2 --remove /home/angela/QC/QCStep5/QCStep5d/related.to.remove.txt --make-bed --out /home/angela/QC/QCStep5/QCStep5d/QCStep5d
-  ##Removes individuals with >0.25 relatedness and creates new binary files without them
+plink --bfile /home/angela/QC/QCStep2/QCStep2 --extract /home/angela/QC/QCStep5/QCStep5a/QCStep5a.prune.in --remove /home/angela/QC/QCStep5/QCStep5d/related.to.remove.txt --make-bed --out /home/angela/QC/QCStep5/QCStep5d/QCStep5d
+  ##Removes individuals with >0.25 relatedness, extracts SNPs from the pruned list in QCStep5a, and creates new binary files without them
   ###1522836 variants loaded from .bim file.
   ###1264 people (446 males, 818 females) loaded from .fam.
   ###--remove: 1189 people remaining.
   ###Total genotyping rate in remaining samples is 0.999246.
-  ###1522836 variants and 1189 people pass filters and QC.
+  ###126827 variants and 1189 people pass filters and QC.
   ###--make-bed to /home/angela/QC/QCStep5/QCStep5d/QCStep5d.bed + /home/angela/QC/QCStep5/QCStep5d/QCStep5d.bim + /home/angela/QC/QCStep5/QCStep5d/QCStep5d.fam ... done.
 
 #QCStep5e:
-plink --bfile /home/angela/QC/QCStep5/QCStep5d/QCStep5d --extract /home/angela/QC/QCStep5/QCStep5a/QCStep5a.prune.in --made-bed --out /home/angela/QC/QCStep5/QCStep5e/QCStep5e
-  ##Combines the last few steps and checks heterozygosity
-  ##User: Create a list of individuals with more than 3 standard deviations from the mean
-  ###1522836 variants loaded from .bim file.
+plink --bfile /home/angela/QC/QCStep5/QCStep5d/QCStep5d --het --out /home/angela/QC/QCStep5/QCStep5e/QCStep5e
+  ##Checks heterozygosity
+  ##User: Create a list of individuals with more than 3 standard deviations from the mean (in this example, 3SD.txt)
+  ###126827  variants loaded from .bim file.
   ##1189 people (408 males, 781 females) loaded from .fam.
-  ###--extract: 126827 variants remaining.
   ###Total genotyping rate is 0.999137.
   ###126827 variants and 1189 people pass filters and QC.
   ###--het: 126827 variants scanned, report written to /home/angela/QCStep5/QCStep5e/QCStep5e.het .
@@ -115,8 +114,8 @@ plink --bfile /home/angela/QC/QCStep5/QCStep5d/QCStep5d --extract /home/angela/Q
 #At this point, continue to run analyses from https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/TCS_GWAS_QC/03_GWAS_QC_plots.html
 
 #QCStep5f: 
-plink --bfile /home/angela/QC/QCStep5/QCStep5e/QCStep5e --remove /home/angela/QC/QCStep5/QCStep5d/3SD.txt --make-bed --out /home/angela/QC/QCStep5/QCStep5f/QCStep5f
-  ##Makes a new set of bfiles w/o >0.25 relatedness or +/-3 SD outliers
+plink --bfile /home/angela/QC/QCStep5/QCStep5d/QCStep5d --remove /home/angela/QC/QCStep5/QCStep5e/3SD.txt --make-bed --out /home/angela/QC/QCStep5/QCStep5f/QCStep5f
+  ##Makes a new set of bfiles without >0.25 relatedness or +/-3 SD outliers
   ###1522836 variants loaded from .bim file.
   ###1189 people (408 males, 781 females) loaded from .fam.
   ###--extract: 52694 variants remaining.
@@ -128,7 +127,7 @@ plink --bfile /home/angela/QC/QCStep5/QCStep5e/QCStep5e --remove /home/angela/QC
 #QCStep6a:
 plink --bfile /home/angela/QC/QCStep5/QCStep5f/QCStep5f --bmerge /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bed /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bim /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam --make-bed --out /home/angela/QC/QCStep6/QCStep6a/QCStep6a
   ##Merge study cohort with HAPMAP for principal component analysis; produces new .fam file and .missnp, a list of missing SNPs
-  ##User: Convert .missnp into a .txt list of SNPs
+  ##User: Convert .missnp into a .txt list of SNPs (in this example, missnp.txt)
   ###1184 people loaded from /home/angela/QCStep6/QCStep6.fam.
   ###391 people to be merged from /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam.
   ###Of these, 391 are new, while 0 are present in the base dataset.
