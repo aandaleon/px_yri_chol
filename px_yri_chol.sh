@@ -1,4 +1,5 @@
 #Based on https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/TCS_GWAS_QC/02_plink_QC.sh
+#.log outputs are cut to only include relevant data in this example
   
 #QCStep1:
 plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --missing --out /home/angela/QC/QCStep1/QCStep1
@@ -10,7 +11,7 @@ plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoru
   ###1581500 variants and 1264 people pass filters and QC.
 
 #QCStep2:
-plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --geno 0.01 --make-bed --out bfile /home/angela/QC/QCStep2/QCStep2
+plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --geno 0.01 --make-bed --out /home/angela/QC/QCStep2/QCStep2
   ##Recalculates individual call rates after removing SNPs with call rates <99% and creates new set of binary files
   ###1581500 variants loaded from .bim file.
   ###1264 people (446 males, 818 females) loaded from .fam.
@@ -103,18 +104,17 @@ plink --bfile /home/angela/QC/QCStep2/QCStep2 --extract /home/angela/QC/QCStep5/
 
 #QCStep5e:
 plink --bfile /home/angela/QC/QCStep5/QCStep5d/QCStep5d --het --out /home/angela/QC/QCStep5/QCStep5e/QCStep5e
-  ##Checks heterozygosity
-  ##User: Create a list of individuals with more than 3 standard deviations from the mean (in this example, 3SD.txt)
+  ##Checks heterozygosity for individuals with <0.25 relatedness
   ###126827  variants loaded from .bim file.
   ##1189 people (408 males, 781 females) loaded from .fam.
   ###Total genotyping rate is 0.999137.
   ###126827 variants and 1189 people pass filters and QC.
-  ###--het: 126827 variants scanned, report written to /home/angela/QCStep5/QCStep5e/QCStep5e.het .
+  ###--het: 113384 variants scanned, report written to /home/angela/QCStep5/QCStep5e/QCStep5e.het .
 
 #At this point, continue to run analyses from https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/TCS_GWAS_QC/03_GWAS_QC_plots.html
 
 #QCStep5f: 
-plink --bfile /home/angela/QC/QCStep5/QCStep5d/QCStep5d --remove /home/angela/QC/QCStep5/QCStep5e/3SD.txt --make-bed --out /home/angela/QC/QCStep5/QCStep5f/QCStep5f
+plink --bfile /home/angela/QC/QCStep5/QCStep5d/QCStep5d --remove /home/angela/QC/QCStep5/QCStep5e/QCStep5e.txt --make-bed --out /home/angela/QC/QCStep5/QCStep5f/QCStep5f
   ##Makes a new set of bfiles without >0.25 relatedness or +/-3 SD outliers
   ###1522836 variants loaded from .bim file.
   ###1189 people (408 males, 781 females) loaded from .fam.
@@ -127,25 +127,27 @@ plink --bfile /home/angela/QC/QCStep5/QCStep5d/QCStep5d --remove /home/angela/QC
 #QCStep6a:
 plink --bfile /home/angela/QC/QCStep5/QCStep5f/QCStep5f --bmerge /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bed /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bim /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam --make-bed --out /home/angela/QC/QCStep6/QCStep6a/QCStep6a
   ##Merge study cohort with HAPMAP for principal component analysis; produces new .fam file and .missnp, a list of missing SNPs
-  ##User: Convert .missnp into a .txt list of SNPs (in this example, missnp.txt)
   ###1184 people loaded from /home/angela/QCStep6/QCStep6.fam.
   ###391 people to be merged from /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam.
   ###Of these, 391 are new, while 0 are present in the base dataset.
   ###Warning: Multiple chromosomes seen for variant...
   ###Warning: Multiple positions seen for variant...
+  ###126827 markers loaded from /home/angela/QC/QCStep5/QCStep5f/QCStep5f.bim.
+  ###1499880 markers to be merged from /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bim.
+  ###Of these, 1451475 are new, while 48405 are present in the base dataset.
   
 #QCStep6b:
-plink --bfile /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig --exclude /home/angela/QC/QCStep6/QCStep6b/missnp.txt --make-bed --out /home/angela/QC/QCStep6/QCStepb/QCStep6b
+plink --bfile /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig --exclude /home/angela/QC/QCStep6/QCStep6a/QCStep6a-merge.missnp --make-bed --out /home/angela/QC/QCStep6/QCStep6b/QCStep6b
   ##Exclude missing SNPs for another try at merging
   ###1499880 variants loaded from .bim file.
   ###391 people (197 males, 194 females) loaded from .fam.
   ###--extract: 11515 variants remaining.
   ###11515 variants and 391 people pass filters and QC.
   ###Among remaining phenotypes, 0 are cases and 391 are controls.
-  ###--make-bed to /home/angela/QC/QCStep6/QCStep6c.bed + /home/angela/QC/QCStep6/QCStep6c.bim + /home/angela/QC?QCStep6/QCStep6c.fam ... done.
+  ###--make-bed to /home/angela/QC/QCStep6/QCStep6b/QCStep6b.bed + /home/angela/QC/QCStep6/QCStep6b/QCStep6b.bim + /home/angela/QC/QCStep6/QCStep6b/QCStep6b.fam ... done.
 
 #QCStep6c:
-plink --bfile /home/angela/QC/QCStep5/QCStep5f/QCStep5f --bmerge /home/angela/QC/QCStep6/QCStep6b/QCStep6b.bed /home/angela/QC/QCStep6/QCStepb/QCStep6b.bim /home/angela/QC/QCStep6/QCStepb/QCStep6b.fam --make-bed --out /home/angela/QC/QCStep6c/QCStep6c
+plink --bfile /home/angela/QC/QCStep5/QCStep5f/QCStep5f --bmerge /home/angela/QC/QCStep6/QCStep6b/QCStep6b.bed /home/angela/QC/QCStep6/QCStep6b/QCStep6b.bim /home/angela/QC/QCStep6/QCStep6b/QCStep6b.fam --make-bed --out /home/angela/QC/QCStep6/QCStep6c/QCStep6c
   ##After excluding, try merging HAPMAP and study cohort again
   ###1184 people loaded from /home/angela/QC/QCStep5/QCStep5f/QCStep5f.fam.
   ###391 people to be merged from /home/angela/QC/QCStep6/QCStep6b/QCStep6b.fam.
@@ -153,80 +155,109 @@ plink --bfile /home/angela/QC/QCStep5/QCStep5f/QCStep5f --bmerge /home/angela/QC
   ###Warning: Multiple chromosomes seen for variant...
   ###Warning: Multiple positions seen for variant...
   ###126827 markers loaded from /home/angela/QC/QCStep5/QCStep5f/QCStep5f.bim.
-  ###1488465 markers to be merged from /home/angela/QC/QCStep6/QCStep6b/QCStep6b.bim.
-  ###Of these, 1476929 are new, while 11436 are present in the base dataset.
-  ###1 more multple-position warning: see log file.
+  ###1475615 markers to be merged from /home/angela/QC/QCStep6/QCStep6b/QCStep6b.bim.
+  ###Of these, 1451475  are new, while 11436 are present in the base dataset.
+  ###2 more multple-position warnings: see log file.
   ###Warning: Variants '...' and '...' have the same position
-  ###Performing single-pass merge (1575 people, 1529623 variants).
+  ###16561 more same-position warnings: see log file.
+  ###Performing single-pass merge (1575 people, 1578302 variants).
   ###8901 more same-position warnings: see log file.
-  ###Merged fileset written to /home/angela/QC/QCStep6/QCStep6c/QCStep6c.bed + /home/angela/QC/QCStep6/QCStep6c/QCStep6c.bim + /home/angela/QC/QCStep6/QCStep6c/QCStep6c.fam .
-  ###1529623 variants loaded from .bim file.
+  ###Merged fileset written to /home/angela/QC/QCStep6/QCStep6c/QCStep6c-merge.bed + /home/angela/QC/QCStep6/QCStep6c/QCStep6c-merge.bim + /home/angela/QC/QCStep6/QCStep6c/QCStep6c-merge.fam .
+  ###1578302 variants loaded from .bim file.
   ###1575 people (602 males, 973 females) loaded from .fam.
   ###391 phenotype values loaded from .fam.
   ###Warning: 1676 het. haploid genotypes present (see /home/angela/QC/QCStep6/QCStep6c/QCStep6c.hh ); many commands treat these as missing.
-  ###Total genotyping rate is 0.230982.
-  ###1529623 variants and 1575 people pass filters and QC.
+  ###Total genotyping rate is 0.257259.
+  ###1578302 variants and 1575 people pass filters and QC.
   ###Among remaining phenotypes, 0 are cases and 391 are controls.  (1184 phenotypes are missing.)
   ###--make-bed to /home/angela/QC/QCStep6/QCStep6c/QCStep6c.bed + /home/angela/QC/QCStep6/QCStep6c/QCStep6c.bim + /home/angela/QC/QCStep6/QCStep6c/QCStep6c ... done.
 
 #QCStep6d:
 plink --bfile /home/angela/QC/QCStep6/QCStep6c/QCStep6c --geno 0.2 --maf 0.05 --make-bed --out /home/angela/QC/QCStep6/QCStep6d/QCStep6d
   ##Filter merged file to SNPs with >90% genotypes
-  ###1529623 variants loaded from .bim file.
+  ###1578302 variants loaded from .bim file.
   ###1575 people (602 males, 973 females) loaded from .fam.
   ###391 phenotype values loaded from .fam.
   ###Warning: 1676 het. haploid genotypes present (see /home/angela/try/try6d.hh ); many commands treat these as missing.
-  ###Total genotyping rate is 0.230982.
-  ###1518187 variants removed due to missing genotype data (--geno).
-  ###17 variants removed due to minor allele threshold(s)
+  ###Total genotyping rate is 0.257259.
+  ###1554164  variants removed due to missing genotype data (--geno).
+  ###185  variants removed due to minor allele threshold(s)
   ###(--maf/--max-maf/--mac/--max-mac).
-  ###11419 variants and 1575 people pass filters and QC.
+  ###23953 variants and 1575 people pass filters and QC.
   ###--make-bed to /home/angela/QC/QCStep6/QCStep6d/QCStep6d.bed + /home/angela/QC/QCStep6/QCStep6d/QCStep6d.bim + /home/angela/QC/QCStep6/QCStep6d/QCStep6d.fam ... done.
 
 #QCStep6e:
 plink --bfile /home/angela/QC/QCStep6/QCStep6d/QCStep6d --indep-pairwise 50 5 0.3 --recode --out /home/angela/QC/QCStep6/QCStep6e/QCStep6e
   ##Reduces number of points for plotting in a principal components analysis, and creaties .map and .ped files for smartpca
-  ###11419 variants loaded from .bim file.
+  ###23953 variants loaded from .bim file.
   ###1575 people (602 males, 973 females) loaded from .fam.
   ###391 phenotype values loaded from .fam.
-  ###Total genotyping rate is 0.990962.
-  ###11419 variants and 1575 people pass filters and QC.
-  ###Among remaining phenotypes, 0 are cases and 391 are controls.  (1184 phenotypes are missing.)
+  ###Total genotyping rate is 0.987966.
+  ###23953  variants and 1575 people pass filters and QC.
   ###--recode to /home/angela/QC/QCStep6/QCStep6e/QCStep6e.ped + /home/angela/QC/QCStep6/QCStep6e/QCStep6e.map ... done.
-  ###Pruned 53 variants from chromosome 1, leaving 860.
-  ###Pruned 29 variants from chromosome 2, leaving 877.
-  ###Pruned 24 variants from chromosome 3, leaving 754.
-  ###Pruned 26 variants from chromosome 4, leaving 648.
-  ###Pruned 22 variants from chromosome 5, leaving 651.
-  ###Pruned 35 variants from chromosome 6, leaving 719.
-  ###Pruned 26 variants from chromosome 7, leaving 590.
-  ###Pruned 16 variants from chromosome 8, leaving 590.
-  ###Pruned 20 variants from chromosome 9, leaving 482.
-  ###Pruned 27 variants from chromosome 10, leaving 585.
-  ###Pruned 17 variants from chromosome 11, leaving 597.
-  ###Pruned 30 variants from chromosome 12, leaving 549.
-  ###Pruned 17 variants from chromosome 13, leaving 447.
-  ###Pruned 6 variants from chromosome 14, leaving 394.
-  ###Pruned 12 variants from chromosome 15, leaving 337.
-  ###Pruned 6 variants from chromosome 16, leaving 368.
-  ###Pruned 20 variants from chromosome 17, leaving 333.
-  ###Pruned 10 variants from chromosome 18, leaving 355.
-  ###Pruned 14 variants from chromosome 19, leaving 232.
-  ###Pruned 10 variants from chromosome 20, leaving 301.
-  ###Pruned 7 variants from chromosome 21, leaving 163.
-  ###Pruned 2 variants from chromosome 22, leaving 158.
-  ###Pruning complete.  429 of 11419 variants removed.
+  ###Pruned 156 variants from chromosome 1, leaving 1814.
+  ###Pruned 118 variants from chromosome 2, leaving 1763.
+  ###Pruned 102 variants from chromosome 3, leaving 1532.
+  ###Pruned 113 variants from chromosome 4, leaving 1339.
+  ###Pruned 104 variants from chromosome 5, leaving 1332.
+  ###Pruned 138 variants from chromosome 6, leaving 1432.
+  ###Pruned 95 variants from chromosome 7, leaving 1173.
+  ###Pruned 88 variants from chromosome 8, leaving 1170.
+  ###Pruned 75 variants from chromosome 9, leaving 1006.
+  ###Pruned 114 variants from chromosome 10, leaving 1199.
+  ###Pruned 74 variants from chromosome 11, leaving 1154.
+  ###Pruned 83 variants from chromosome 12, leaving 1099.
+  ###Pruned 57 variants from chromosome 13, leaving 892.
+  ###Pruned 47 variants from chromosome 14, leaving 741.
+  ###Pruned 45 variants from chromosome 15, leaving 690.
+  ###Pruned 37 variants from chromosome 16, leaving 751.
+  ###Pruned 64 variants from chromosome 17, leaving 662.
+  ###Pruned 33 variants from chromosome 18, leaving 732.
+  ###Pruned 33 variants from chromosome 19, leaving 481.
+  ###Pruned 51 variants from chromosome 20, leaving 637.
+  ###Pruned 24 variants from chromosome 21, leaving 357.
+  ###Pruned 16 variants from chromosome 22, leaving 330.
+  ###Pruning complete.  1667 of 23953 variants removed.
   ###Marker lists written to /home/angela/QC/QCStep6/QCStep6e/QCStep6e.prune.in and /home/angela/QC/QCStep6/QCStep6e/QCStep6e.prune.out .
 
 #QCStep6f:
-perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/angela/QCStep6/QCStep6e/QCStep6e 0 > /home/angela/QCStep6/QCStep6f/QCStep6f
-  ##Make parfile for smartpca
-  ##User: edit path files in parfile
-  
-#QCStep6g:
 awk '{print $1,$2,$3,$4,$5,1}' /home/angela/QC/QCStep6/QCStep6d/QCStep6d.fam > /home/angela/QCStep6/QCStep6e/QCStep6e.fam
 
+#QCStep6g:
+perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/angela/QC/QCStep6/QCStep6e/QCStep6e 0 > /home/angela/QC/QCStep6/QCStep6f/QCStep6f.par
+  ##Make parfile for smartpca
+
 #QCStep6h
-module load eigensoft/5.0.1
-qsub run_smartpca.sh
-  #run PCA
+smartpca -p /home/angela/QC/QCStep6/QCStep6f/QCStep6f.par
+  ##run smartpca for principal components analysis
+  ###parameter file: /home/angela/QC/QCStep6/QCStep6f/QCStep6f.par
+  ###THE INPUT PARAMETERS
+  ###PARAMETER NAME: VALUE
+  ###genotypename: /home/angela/QC/QCStep6/QCStep6e/QCStep6e.ped
+  ###snpname: /home/angela/QC/QCStep6/QCStep6e/QCStep6e.map
+  ###indivname: /home/angela/QC/QCStep6/QCStep6e/QCStep6e.fam
+  ###evecoutname: /home/angela/QC/QCStep6/QCStep6e/QCStep6e.evec
+  ###evaloutname: /home/angela/QC/QCStep6/QCStep6e/QCStep6e.eval
+  ###outliername: /home/angela/QC/QCStep6/QCStep6e/QCStep6e.outlier
+  ###numoutevec: 10
+  ###numoutlieriter: 0
+  ###numoutlierevec: 2
+  ###outliersigmathresh: 6
+  ###number of samples used: 1575 number of snps used: 23953
+  ###total number of snps killed in pass: 0  used: 23953
+  ###trace:  49558.312
+  ### To get Tracy-Widom statistics: recompile smartpca with TWTAB correctly specified in Makefile, or
+  ###just run twstats (see README file in POPGEN directory)
+  ###kurtosis           snps    indivs
+  ###eigenvector    1     2.775     3.905
+  ###eigenvector    2     3.428     7.207
+  ###eigenvector    3    10.674     8.687
+  ###eigenvector    4     4.274   545.917
+  ###eigenvector    5     2.942   158.514
+  ###eigenvector    6     3.335   107.766
+  ###eigenvector    7    10.293     4.199
+  ###eigenvector    8     4.252     3.700
+  ###eigenvector    9     3.373     5.919
+  ###eigenvector   10     3.152     3.870
+  ###population:   0              Control 1575
+  ###eigbestsnp...
