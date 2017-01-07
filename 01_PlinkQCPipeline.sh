@@ -1,5 +1,5 @@
 #Based on https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/TCS_GWAS_QC/02_plink_QC.sh
-#.log outputs are cut to only include relevant data in this example
+#.log outputs are cut to only include relevant information in this example
   
 #QCStep1:
 plink --bfile /home/wheelerlab1/Data/dbGaP_YRI_CHOL_height/CIDR_Dementia_AA_Yoruba_Top_subject_level_filtered.chr1-22.noNAfrq --missing --out /home/angela/QC/QCStep1/QCStep1
@@ -28,7 +28,7 @@ plink --bfile /home/angela/QC/QCStep2/QCStep2 --missing --out /home/angela/QC/QC
   ###--missing: Sample missing data report written to /home/angela/QC/QCStep3/QCStep3.imiss, and variant-based missing data report written to /home/angela/QC/QCStep3/QCStep3.lmiss.
 
 #QCStep4:
-plink --bfile /home/angela/QC/QCStep2/QCStep2 --hardy  --out /home/angela/QC/QCStep4/QCStep4
+plink --bfile /home/angela/QC/QCStep2/QCStep2 --hardy --out /home/angela/QC/QCStep4/QCStep4
   ##Calculates Hardy-Weinberg statistics for each SNP using founders (in this cohort, only 9 are available) in a .hwe file to flag later.; here, no SNP in .hwe has reached p < 1e-06
   ###1522836 variants loaded from .bim file.
   ###1264 people (446 males, 818 females) loaded from .fam.
@@ -181,7 +181,7 @@ plink --bfile /home/angela/QC/QCStep6/QCStep6c/QCStep6c --geno 0.2 --maf 0.05 --
   ###Warning: 1676 het. haploid genotypes present (see /home/angela/try/try6d.hh ); many commands treat these as missing.
   ###Total genotyping rate is 0.257259.
   ###1554164  variants removed due to missing genotype data (--geno).
-  ###185  variants removed due to minor allele threshold(s)
+  ###185 variants removed due to minor allele threshold(s)
   ###(--maf/--max-maf/--mac/--max-mac).
   ###23953 variants and 1575 people pass filters and QC.
   ###--make-bed to /home/angela/QC/QCStep6/QCStep6d/QCStep6d.bed + /home/angela/QC/QCStep6/QCStep6d/QCStep6d.bim + /home/angela/QC/QCStep6/QCStep6d/QCStep6d.fam ... done.
@@ -261,3 +261,26 @@ smartpca -p /home/angela/QC/QCStep6/QCStep6f/QCStep6f.par
   ###eigenvector   10     3.152     3.870
   ###population:   0              Control 1575
   ###eigbestsnp...
+
+#QCStep6i:
+plink --bfile /home/angela/QC/QCStep2/QCStep2 --remove /home/angela/QC/QCStep5/QCStep5d/related.to.remove.txt --make-bed --out /home/angela/QC/QCStep6/QCStep6i/QCStep6i
+  ##Create list of people to include in GWAS with the original 1.5m SNPs
+  ###1522836 variants loaded from .bim file.
+  ###1264 people (446 males, 818 females) loaded from .fam.
+  ###--remove: 1189 people remaining.
+  ###Total genotyping rate in remaining samples is 0.999246.
+  ###1522836 variants and 1189 people pass filters and QC.
+  ###--make-bed to /home/angela/QC/QCStep6/QCStep6i/QCStep6i.bed + /home/angela/QC/QCStep6/QCStep6i/QCStep6i.bim + /home/angela/QC/QCStep6/QCStep6i/QCStep6i.fam ... done.
+
+#QCStep6j:
+plink --bfile /home/angela/QC/QCStep6/QCStep6i/QCStep6i --remove /home/angela/QC/QCStep5/QCStep5e/QCStep5e.txt --make-bed --out /home/angela/QC/QCStep6/QCStep6j/QCStep6j
+  ##B/c Plink doesn't like running with three similar tags
+  ###1189 people (408 males, 781 females) loaded from .fam.
+  ###--remove: 1184 people remaining.
+  ###Total genotyping rate in remaining samples is 0.999244.
+  ###1522836 variants and 1184 people pass filters and QC.
+  ###--make-bed to /home/angela/QC/QCStep6/QCStep6j/QCStep6j.bed + /home/angela/QC/QCStep6/QCStep6j/QCStep6j.bim + /home/angela/QC/QCStep6/QCStep6j/QCStep6j.fam ... done.
+
+#QCStep6k:
+
+  ##See above CREATE EXCLUSION LIST
