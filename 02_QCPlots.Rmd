@@ -3,8 +3,6 @@ title: "QC Plots px_yri_chol"
 author: "Angela Andaleon"
 output: html_document
 ---
-###NOTE ADD /home/angela/ TO FILE PATHS WHEN PUBLISHING
-
 ###Based on https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/TCS_GWAS_QC/03_GWAS_QC_plots.Rmd
 
 ###Load packages, functions
