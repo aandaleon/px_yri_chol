@@ -182,6 +182,12 @@ inclusion <- inclusion[inclusion$PC2 <= uPC2,]
 samples <- inclusion[,1:2]
 table(inclusion$pop)
 
+##Create list of these excluded individuals for removal in the GWAS
+exclusion <- gwas[gwas$PC1 <= lPC1,]
+exclusion <- exclusion[exclusion$PC1 >= uPC1,]
+exclusion <- exclusion[exclusion$PC2 <= lPC2,]
+exclusion <- exclusion[exclusion$PC2 >= uPC2,]
+
 dim(samples)[1]
 dim(gwas)[1]-dim(samples)[1]
 
