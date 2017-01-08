@@ -1,0 +1,10 @@
+Sections:
+
+What is a GWAS? (based on https://github.com/hwheeler01/GWAS_workshop)
+  A GWAS is a genome-wide association study that is used for investigating the genetic architecture of complex traits
+
+Definitions
+Introduction to example (px_yri_chol)
+Quality control
+Conducting the GWAS
+PrediXcan
