@@ -1,0 +1,38 @@
+---
+title: "CHOL"
+author: "Angela Andaleon"
+output: html_document
+---
+##EDIT QCSTEP2 LINE
+##In RStudio
+
+```{r CHOL}
+data <- read.table("/home/angela/GWAS/Phenotypes/YRI_phenotypes.txt", header = T)
+hist(data$CHOL)
+	##Found in /home/angela/GWAS/CHOL/hist_CHOL.pdf
+shapiro.test(data$CHOL)
+	##W = 0.99298, p-value = 9.258e-05"
+	##Note: using log2 and log10 produces "p-value = 8.722e-09"
+```
+
+##In command line
+
+```{bash pheno}
+plink --bfile /home/angela/QC/QCStep2/QCStep2 --maf 0.05 --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name CHOL --out /home/angela/GWAS/CHOL/CHOL
+```
+
+##In RStudio
+
+```{r CHOL}
+CHOL_linear <- read.table("/home/angela/GWAS/CHOL/CHOL.assoc.linear", header = T)
+CHOL_linear_noNA <- CHOL_linear[complete.cases(CHOL_linear),]
+dev.off()
+source("/home/angela/GWAS/qqman.r")
+png(filename="/home/angela/GWAS/CHOL/CHOL_qq.png", res=100)
+qq(CHOL_linear_noNA$P)
+	##In "/home/angela/GWAS/CHOL/CHOL_qq.png"
+dev.off()
+source("/home/angela/GWAS/qqman.r")
+manhattan(CHOL_linear_noNA)
+	##In "/home/angela/GWAS/CHOL/CHOL_man.png"
+dev.off()

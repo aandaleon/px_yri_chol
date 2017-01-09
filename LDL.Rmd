@@ -1,0 +1,37 @@
+---
+title: "LDL"
+author: "Angela Andaleon"
+output: html_document
+---
+##EDIT QCSTEP2 LINE
+##In RStudio
+
+```{r LDL}
+data <- read.table("/home/angela/GWAS/Phenotypes/YRI_phenotypes.txt", header = T)
+hist(data$LDL)
+	##Saved to "/home/angela/GWAS/LDL/hist_LDL.pdf"
+shapiro.test(data$LDL)
+	##"W = 0.98808, p-value = 2.18E-07"
+	##For log10, "0.97228, p-value = 4.54e-13"
+```
+
+##In command line
+
+```{bash pheno}
+plink --bfile /home/angela/QC/QCStep2/QCStep2 --maf 0.05 --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name LDL --out /home/angela/GWAS/LDL/LDL
+```
+
+##In RStudio
+
+```{r LDL}
+LDL_linear <- read.table("/home/angela/GWAS/LDL/LDL.assoc.linear", header = T)
+LDL_linear_noNA <- LDL_linear[complete.cases(LDL_linear),]
+source('/home/angela/GWAS/qqman.r')
+qq(LDL_linear_noNA$P)
+	##Saved to "/home/angela/GWAS/LDL/LDL_qq.png"
+dev.off()
+source('/home/angela/GWAS/qqman.r')
+manhattan(LDL_linear_noNA)
+	##Saved to "/home/angela/GWAS/LDL/LDL_man.png"
+dev.off()
+```

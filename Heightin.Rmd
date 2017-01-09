@@ -1,0 +1,92 @@
+---
+title: "HeightIn_wSex"
+author: "Angela Andaleon"
+output: html_document
+---
+##EDIT QCStep2
+##EDIT TO LOG
+
+##In RStudio
+
+```{r Height w/o sex}
+data <- read.table("/home/angela/GWAS/Phenotypes/YRI_phenotypes.txt", header = T)
+hist(data$Heightin)
+	##Saved to "/home/angela/GWAS/Heightin/hist_Heightin.pdf"
+shapiro.test(data$Heightin)
+	##"W = 0.99327, p-value = 2.418e-05"
+	##For log10, "W = 0.99699, p-value 0.02002"
+```
+
+##In command line
+
+```{bash pheno}
+plink --bfile /home/angela/QC/QCStep2/QCStep2 --maf 0.05 --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name Heightin --out /home/angela/GWAS/Heightin/Heightin
+	##Results saved to /home/angela/GWAS/Heightin/Heightin.assoc.linear
+```
+
+##In RStudio
+
+```{r Heightin}
+Heightin_linear <- read.table('/home/angela/GWAS/Heightin/Heightin.assoc.linear', header = T)
+Heightin_linear_noNA <- Heightin_linear[complete.cases(Heightin_linear),]
+source('/home/angela/GWAS/qqman.r')
+qq(Heightin_linear_noNA$P)
+	##Saved to /home/angela/GWAS/Heightin/Heightin_qq.png
+dev.off()
+source('/home/angela/GWAS/qqman.r')
+manhattan(Heightin_linear_noNA)
+	##Saved to /home/angela/GWAS/Heightin/Heightin_man.png
+dev.off()
+Note: these files can be found in /home/angela/GWAS/Heightin/NoCovar
+```
+
+##Next step: figure out how YRI_phenotypes and the master list are connected, add sex data to YRI_phenotypes, and run as a covariable
+##Some subject ID's matched to FID and IID in /home/wheelerlab1/Data/dGaP_YRI_CHOL_height/subjectID2scanID.txt
+	##Extremely incomplete 
+	##But it DOES have the same family ID's...
+	##Copy into phenotype file
+
+##In RStudio
+
+```{r height w/ sex}
+subjectID2scanID <- read.table('/home/angela/GWAS/Phenotypes/subjectID2scanID.txt', header = T)
+names(subjectID2scanID) <- c("FID","IID","SAMPID","subjectID","scanID","sex","phrasing.type")
+subjectID2scanID <- subset(subjectID2scanID, select = c(IID,sex))
+data$IID <- as.character(data$IID)
+subjectID2scanID$IID <- as.character(subjectIDscanID$IID)
+FIDwSex <- left_join(data, subjectID2scanID, by = "IID")
+FIDwSex <- FIDwSex[!duplicated(FIDwSex),]
+FIDwSex$sex.f <- as.numeric(factor(FIDwSex$sex, levels = c("M","F")))
+write.table(FIDwSex, file = "/home/angela/GWAS/Phenotypes/FIDwSex.txt", quote = FALSE, row.names = FALSE)
+	##New phenotype file w/ sexes /home/angela/GWAS/Phenotypes/FIDwSex.txt
+```
+
+##In command line
+
+```{bash pheno}
+plink --bfile /home/angela/QC/QCStep2/QCStep2 --maf 0.05 --linear --adjust --pheno /home/angela/GWAS/Phenotypes/FIDwSex.txt --pheno-name Heightin --covar /home/angela/GWAS/Phenotypes/FIDwSex.txt --covar-name sex.f --out /home/angela/GWAS/Heightin/Covar/HeightinCovar
+	##Saved to /home/angela/GWAS/Heightin/Covar/HeightinCovar
+	##Genomic inflation est. lambda (based on median chisq) = 1.05257
+```
+
+##In RStudio
+
+```{r Height w/ sex}
+Heightin_wSex <- read.table('/home/angela/GWAS/Heightin/Covar/HeightinCovar.assoc.linear', header = T)
+	~Why in the world are the TEST sex.f p-values at like e-128
+Heightin_wSex_noNA <- Heightin_wSex[complete.cases(Heightin_wSex),]
+
+##it makes sense that the sex term would be super significant for height. You'll want to filter the `.linear` file and only plot the `ADD` row p-values-these are the SNP p-values. The super low p-values are the sex effect p-values."
+
+Heightin_wSex_noNA_filtered <- filter(Heightin_wSex_noNA, TEST %in% c("ADD"))
+source('/home/angela/GWAS/qqman.r')
+qq(Heightin_wSex_noNA_filtered$P)
+	##/home/angela/GWAS/Heightin/Covar/Heightin_Covar_qq.png
+dev.off()
+source('/home/angela/GWAS/qqman.r')
+manhattan(Heightin_wSex_noNA_filtered)
+	##/home/angela/GWAS/Heightin/Covar/Heightin_Covar_man.png
+dev.off()
+write.table(Heightin_wSex_noNA_filtered, file = "/home/angela/GWAS/Heightin/Covar/Heightin_wSex_noNA_filtered.txt", quote = FALSE, row.names = FALSE)
+write.table(Heightin_wSex_noNA, file = "/home/angela/GWAS/Heightin/Covar/Heightin_wSex_noNA.txt", quote = FALSE, row.names = FALSE)
+```
