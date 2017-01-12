@@ -282,5 +282,10 @@ plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6i/QCStep6i --remove /ho
   ###--make-bed to /home/angela/px_yri_chol/QC/QCStep6/QCStep6j/QCStep6j.bed + /home/angela/px_yri_chol/QC/QCStep6/QCStep6j/QCStep6j.bim + /home/angela/px_yri_chol/QC/QCStep6/QCStep6j/QCStep6j.fam ... done.
 
 #QCStep6k:
-
-  ##See above CREATE EXCLUSION LIST
+plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6j/QCStep6j --keep /home/angela/px_yri_chol/QC/QC_Plots/PC_Plots/GWAS_PCA.txt --make-bed --out /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k
+  ##1184 people (405 males, 779 females) loaded from .fam.
+  ##Keeping individuals within +/- 5 sd of population mean
+  ###--keep: 1157 people remaining.
+  ###Total genotyping rate in remaining samples is 0.999242.
+  ###1522836 variants and 1157 people pass filters and QC.
+  ###--make-bed to /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k.bed + /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k.bim + /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k.fam ... done.
