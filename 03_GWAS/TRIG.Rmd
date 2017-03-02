@@ -1,0 +1,60 @@
+---
+title: "TRIG"
+author: "Angela Andaleon"
+output: html_document
+---
+##EDIT QCSTEP2 LINE
+##EDIT TO INCLUDE LOG ANALYSES
+##In RStudio
+
+```{r TRIG}
+data <- read.table("/home/angela/px_yri_chol/GWAS/Phenotypes/YRI_phenotypes.txt", header = T)
+hist(data$TRIG)
+	##Saved to "/home/angela/px_yri_chol/GWAS/TRIG/hist_TRIG.pdf"
+shapiro.test(data$TRIG)
+	##"W = 0.82521, p-value < 2.2e-16" (!)
+	##For log10, "W = 0.97811, p-value = 2.727e-11"
+log_TRIG <- log(data$TRIG)
+hist(log_TRIG)
+data <- cbind(data, log_TRIG)
+write.table(data, file='/home/angela/px_yri_chol/GWAS/Phenotypes/YRI_phenotypes.txt', quote = F, row.names = F)
+```
+
+##In command line
+
+```{bash pheno}
+plink --bfile /home/angela/px_yri_chol/QC/QCStep2/QCStep2 --maf 0.05 --linear --adjust --pheno /home/angela/px_yri_chol/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name log_TRIG --out /home/angela/px_yri_chol/GWAS/TRIG/log_TRIG
+  ##1522836 variants loaded from .bim file.
+  ##1157 people (397 males, 760 females) loaded from .fam.
+  ##961 phenotype values present after --pheno.
+  ##Before main variant filters, 0 founders and 1157 nonfounders present.
+  ##Total genotyping rate is 0.999242.
+  ##0 variants removed due to minor allele threshold(s)
+  ##(--maf/--max-maf/--mac/--max-mac).
+  ##1522836 variants and 1157 people pass filters and QC.
+  ##Writing linear model association results to /home/angela/px_yri_chol/GWAS/TRIG/log_TRIG.assoc.linear ... done.
+  ##--adjust: Genomic inflation est. lambda (based on median chisq) = 1.
+  ##--adjust values (1504671 variants) written to /home/angela/px_yri_chol/GWAS/TRIG/log_TRIG.assoc.linear.adjusted .
+
+```
+
+##In RStudio
+
+``` {r topSNPs}
+TRIG_linear <- read.table("/home/angela/px_yri_chol/GWAS/TRIG/log_TRIG.assoc.linear", header = T)
+TRIG_linear_noNA <- TRIG_linear[complete.cases(TRIG_linear),]
+```
+![](/home/angela/px_yri_chol/GWAS/TRIG/log_TRIG_topSNPs.png)
+```{r qq}
+source("/home/angela/px_yri_chol/GWAS/qqman.r")
+qq(TRIG_linear_noNA$P)
+	##Saved to "/home/angela/px_yri_chol/GWAS/TRIG/log_TRIG_qq.png"
+```
+![](/home/angela/px_yri_chol/GWAS/TRIG/log_TRIG_qq.png)
+```{r man}
+dev.off()
+source("/home/angela/px_yri_chol/GWAS/qqman.r")
+manhattan(TRIG_linear_noNA)
+	##Saved to "/home/angela/px_yri_chol/GWAS/TRIG/log_TRIG_man.png"
+```
+![](/home/angela/px_yri_chol/GWAS/TRIG/log_TRIG_man.png)

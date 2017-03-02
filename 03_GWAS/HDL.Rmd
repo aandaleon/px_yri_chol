@@ -1,0 +1,58 @@
+---
+title: "HDL"
+author: "Angela Andaleon"
+output: html_document
+---
+
+##In RStudio
+
+```{r HDL}
+data <- read.table("/home/angela/px_yri_chol/GWAS/Phenotypes/YRI_phenotypes.txt", header = T)
+hist(data$HDL)
+  ##"Saved to "/home/angela/px_yri_chol/GWAS/HDL/HDL_hist.png"
+shapiro.test(data$HDL)
+	##"W = 0.97683, p-value = 1.052e-11"
+	##For log2_HDL, "p-value = 9.518e-11"
+```
+
+##In command line
+
+```{bash pheno}
+plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k --maf 0.05 --linear --adjust --pheno /home/angela/px_yri_chol/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name HDL --out /home/angela/px_yri_chol/GWAS/HDL/HDL
+  ##1522836 variants loaded from .bim file.
+  ##1157 people (397 males, 760 females) loaded from .fam.
+  ##961 phenotype values present after --pheno.
+  ##Before main variant filters, 0 founders and 1157 nonfounders present.
+  ##Total genotyping rate is 0.999242.
+  ##0 variants removed due to minor allele threshold(s)
+  ##(--maf/--max-maf/--mac/--max-mac).
+  ##1522836 variants and 1157 people pass filters and QC.
+  ##Phenotype data is quantitative.
+  ##Writing linear model association results to /home/angela/px_yri_chol/GWAS/HDL/HDL.assoc.linear ... done.
+  ##--adjust: Genomic inflation est. lambda (based on median chisq) = 1.
+  ##--adjust values (1504671 variants) written to /home/angela/px_yri_chol/GWAS/HDL/HDL.assoc.linear.adjusted .
+```
+
+## In RStudio
+
+```{r topSNPs}
+HDL_linear <- read.table("/home/angela/px_yri_chol/GWAS/HDL/HDL.assoc.linear", header = T)
+HDL_linear_noNA <- HDL_linear[complete.cases(HDL_linear),]
+```
+![](/home/angela/px_yri_chol/GWAS/HDL/HDL_topSNPs.png)
+```{r QQ}
+source("/home/angela/px_yri_chol/GWAS/qqman.r")
+qq(HDL_linear_noNA$P)
+	##Saved to "/home/angela/px_yri_chol/GWAS/HDL/HDL_qq.png"
+```
+![](/home/angela/px_yri_chol/GWAS/HDL/HDL_qq.png)
+```{r man}
+dev.off()
+source("/home/angela/px_yri_chol/GWAS/qqman.r")
+manhattan(HDL_linear_noNA)
+	##Saved to "/home/angela/px_yri_chol/GWAS/HDL/HDL_man.png"
+```
+![](/home/angela/px_yri_chol/GWAS/HDL/HDL_man.png)
+```{r devoff}
+dev.off()
+```
