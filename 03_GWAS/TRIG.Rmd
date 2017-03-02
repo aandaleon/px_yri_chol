@@ -3,8 +3,7 @@ title: "TRIG"
 author: "Angela Andaleon"
 output: html_document
 ---
-##EDIT QCSTEP2 LINE
-##EDIT TO INCLUDE LOG ANALYSES
+
 ##In RStudio
 
 ```{r TRIG}
@@ -19,18 +18,18 @@ shapiro.test(data$TRIG)
 ##In command line
 
 ```{bash pheno}
-plink --bfile /home/angela/QC/QCStep2/QCStep2 --maf 0.05 --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name TRIG --out /home/angela/GWAS/TRIG/TRIG
+plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k --maf 0.05 --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name TRIG_log --out /home/angela/GWAS/TRIG/TRIG_log
 ```
 
 ##In RStudio
 
 ``` {r TRIG}
-TRIG_linear <- read.table("/home/angela/GWAS/TRIG/TRIG.assoc.linear", header = T)
+TRIG_linear <- read.table("/home/angela/GWAS/TRIG/TRIG_log.assoc.linear", header = T)
 TRIG_linear_noNA <- TRIG_linear[complete.cases(TRIG_linear),]
 source("/home/angela/GWAS/qqman.r")
 qq(TRIG_linear_noNA$P)
-	##Saved to "/home/angela/GWAS/TRIG/TRIG_qq.png"
+	##Saved to "/home/angela/GWAS/TRIG/TRIG_log_qq.png"
 dev.off()
 source("/home/angela/GWAS/qqman.r")
 manhattan(TRIG_linear_noNA)
-	##Saved to "/home/angela/GWAS/TRIG/TRIG_man.png"
+	##Saved to "/home/angela/GWAS/TRIG/TRIG_log_man.png"
