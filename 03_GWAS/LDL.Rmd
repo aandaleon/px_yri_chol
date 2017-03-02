@@ -3,7 +3,7 @@ title: "LDL"
 author: "Angela Andaleon"
 output: html_document
 ---
-##EDIT QCSTEP2 LINE
+
 ##In RStudio
 
 ```{r LDL}
@@ -18,7 +18,7 @@ shapiro.test(data$LDL)
 ##In command line
 
 ```{bash pheno}
-plink --bfile /home/angela/QC/QCStep2/QCStep2 --maf 0.05 --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name LDL --out /home/angela/GWAS/LDL/LDL
+plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k --maf 0.05 --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name LDL --out /home/angela/GWAS/LDL/LDL
 ```
 
 ##In RStudio
