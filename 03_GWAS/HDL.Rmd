@@ -3,7 +3,7 @@ title: "HDL"
 author: "Angela Andaleon"
 output: html_document
 ---
-##EDIT QCSTEP2 LINE
+
 ##RStudio
 
 ```{r HDL}
