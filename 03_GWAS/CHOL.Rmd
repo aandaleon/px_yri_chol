@@ -18,21 +18,20 @@ shapiro.test(data$CHOL)
 ##In command line
 
 ```{bash pheno}
-plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name CHOL --out /home/angela/GWAS/CHOL/CHOL
+plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name CHOL_log --out /home/angela/GWAS/CHOL/CHOL_log
 ```
 
 ##In RStudio
 
 ```{r CHOL}
-CHOL_linear <- read.table("/home/angela/GWAS/CHOL/CHOL.assoc.linear", header = T)
+CHOL_linear <- read.table("/home/angela/GWAS/CHOL/CHOL_log.assoc.linear", header = T)
 CHOL_linear_noNA <- CHOL_linear[complete.cases(CHOL_linear),]
 dev.off()
 source("/home/angela/GWAS/qqman.r")
-png(filename="/home/angela/GWAS/CHOL/CHOL_qq.png", res=100)
 qq(CHOL_linear_noNA$P)
-	##In "/home/angela/GWAS/CHOL/CHOL_qq.png"
+	##In "/home/angela/GWAS/CHOL/CHOL_log_qq.png"
 dev.off()
 source("/home/angela/GWAS/qqman.r")
 manhattan(CHOL_linear_noNA)
-	##In "/home/angela/GWAS/CHOL/CHOL_man.png"
+	##In "/home/angela/GWAS/CHOL/CHOL_log_man.png"
 dev.off()
