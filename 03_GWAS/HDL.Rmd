@@ -17,7 +17,7 @@ shapiro.test(data$HDL)
 ##In command line
 
 ```{bash pheno}
-plink --bfile /home/angela/QC/QCStep2/QCStep2 --maf 0.05 --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name HDL --out /home/angela/GWAS/HDL/HDL
+plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k --maf 0.05 --linear --adjust --pheno /home/angela/GWAS/Phenotypes/YRI_phenotypes.txt --pheno-name HDL --out /home/angela/GWAS/HDL/HDL
 ```
 
 ## In RStudio
