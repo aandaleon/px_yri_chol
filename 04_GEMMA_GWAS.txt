@@ -1,0 +1,110 @@
+How to Use GEMMA for a Univariate Linear Mixed Model with UMich Imputation data 
+by Angela Andaleon as of Feb 14, 2018
+  #Example cohort contains 8,629 individuals (for time comparison purposes)
+  #Commands 1, 3, 4, and 7 can be made into loops for each individual chromosome
+
+Legend:
+#note
+$command
+    output
+*must edit filepaths within copied R script
+
+1. Unzip UMich data
+  #-Pyour_password (change the your_password)
+  #Has been troublesome on the command line as of 2/7; works when physically using WL3
+  $ 7za x -PW6W1Ao{BpRysRk chr_1.zip
+        7-Zip (A) [64] 9.20  Copyright (c) 1999-2010 Igor Pavlov  2010-11-18
+    p7zip Version 9.20 (locale=en_US.UTF-8,Utf16=on,HugeFiles=on,72 CPUs)
+
+    Processing archive: chr_1.zip
+
+    Extracting  chr1.dose.vcf.gz
+    Extracting  chr1.dose.vcf.gz.tbi
+    Extracting  chr1.info.gz
+
+    Everything is Ok
+
+    Files: 3
+    Size:       63462866641
+    Compressed: 62779132101
+
+2. Make a genetic relationship matrix (GRM)
+  #use pre-imputation data (post-imputation too resource-intensive to run)
+  #fam file must have phenotypes in col 6
+  #output must be in the folder you're currently in. If you put a path GEMMA gets angry and then runs the entire thing and then throws away the data.
+  $ gemma -bfile /home/angela/px_his_chol/Imputation/HRC-check/geno -gk 1 -o preImp
+    Reading Files ...
+    ## number of total individuals = 8629
+    ## number of analyzed individuals = 8629
+    ## number of covariates = 1
+    ## number of phenotypes = 1
+    ## number of total SNPs = 159166
+    ## number of analyzed SNPs = 128211
+    Calculating Relatedness Matrix ...
+    Reading SNPs  ==================================================100.00%
+
+3. Convert UMich data to PrediXcan dosages 
+  #Change -i to the right input directory and -c to the correct chromosome
+  #Creates a folder inside your current directory w/ the output
+  #This will take a long time (> 1 day)
+  #Can/should be looped in your favorite programming language
+  $ python /home/angela/px_his_chol/Imputation/UMich/UMich_vcf2px.py -i /home/angela/px_his_chol/Imputation/UMich/ -c 1 -r 1000g
+
+4*. Convert PrediXcan dosages into BIMBAM
+  #Copy R file to your directory and edit file paths to proper areas
+  #This will take a long time (an hour or more)
+  $ Rscript PrediXcanDosages2GEMMABIMBAM.R
+    Read 67658 rows and 8635 (of 8635) columns from 2.867 GB file in 00:01:12
+    
+5. Concatenate the chromosomes into one GEMMA input file
+  #Delete individual files after the entire GEMMA analysis if you want (for storage's sake)
+  $ cat /home/angela/px_his_chol/GEMMA/BIMBAM/chr1.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr2.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr3.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr4.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr5.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr6.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr7.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr8.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr9.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr10.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr11.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr12.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr13.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr14.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr15.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr16.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr17.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr18.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr19.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr20.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr21.txt.gz /home/angela/px_his_chol/GEMMA/BIMBAM/chr22.txt.gz > /home/angela/px_his_chol/GEMMA/BIMBAM/GEMMAinput.txt.gz
+
+6. Prepare two phenotype files - one w/ IIDs and one w/o IIDs
+  #see /home/angela/px_his_chol/hisPheno2.txt and /home/angela/px_his_chol/hisPhenoNoIID.txt for examples
+  #MAKE SURE TO PUT NA'S FOR INCOMPLETE VALUES
+    #In fwrite(na = NA)
+
+7*. Make annotation file
+  #Adds location of SNP in the GEMMA GWAS
+  $ Rscript /home/angela/px_his_chol/GEMMA/anno/makeAnno.R
+  
+8*. Create a covariates file using QC PCAs
+  #essential for admixed (Hispanic, African-American, etc.) populations
+  $ Rscript /home/angela/px_his_chol/GEMMA/makeCovariates.R
+  
+9. Run a preliminary association test in one chromosome
+  #will create an output directory within the current directory
+  #run a preliminary test before you're running entire cohorts and find out something's broken
+  $ gemma -g /home/angela/px_his_chol/GEMMA/BIMBAM/chr22.txt.gz -p /home/angela/px_his_chol/hisPhenoNoIID.txt -n 12 -a /home/angela/px_his_chol/GEMMA/anno/anno22.txt -k /home/angela/px_his_chol/Imputation/UMich/output/preImp.cXX.txt -lmm 4 -o CHOL_rank_chr22 -c /home/angela/px_his_chol/GEMMA/covariates.txt
+    Reading Files ...
+    ## number of total individuals = 8629
+    ## number of analyzed individuals = 8623
+    ## number of covariates = 1
+    ## number of phenotypes = 1
+    ## number of total SNPs = 7507
+    ## number of analyzed SNPs = 7507
+    Start Eigen-Decomposition...
+    pve estimate =0.290824
+    se(pve) =0.0232024
+    Reading SNPs  ==================================================100.00%
+
+10. Run your phenotypes
+  #takes a day or more to run, depending on cohort size
+  $ /usr/local/bin/gemma -g /home/angela/px_his_chol/GEMMA/BIMBAM/GEMMAinput.txt.gz -p /home/angela/px_his_chol/hisPhenoNoIID.txt -n 12 -a /home/angela/px_his_chol/GEMMA/anno/fullAnno.txt -k /home/angela/px_his_chol/Imputation/UMich/output/preImp.cXX.txt -c /home/angela/px_his_chol/GEMMA/covariates.txt -lmm 4 -o CHOL_rank
+    Reading Files ...
+    ## number of total individuals = 8629
+    ## number of analyzed individuals = 8623
+    ## number of covariates = 11
+    ## number of phenotypes = 1
+    ## number of total SNPs = 872321
+    ## number of analyzed SNPs = 872203
+    Start Eigen-Decomposition...
+    pve estimate =0.263515
+    se(pve) =0.0238711
+    Reading SNPs                                                    0.00%
+
+  
+  
+  
+  
