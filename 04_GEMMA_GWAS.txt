@@ -1,5 +1,6 @@
 How to Use GEMMA for a Univariate Linear Mixed Model with UMich Imputation data 
 by Angela Andaleon as of Feb 14, 2018
+  #See http://www.xzlab.org/software/GEMMAmanual.pdf for more details
   #Example cohort contains 8,629 individuals (for time comparison purposes)
   #Commands 1, 3, 4, and 7 can be made into loops for each individual chromosome
 
