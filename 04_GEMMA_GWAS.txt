@@ -54,7 +54,7 @@ $command
 4*. Convert PrediXcan dosages into BIMBAM
   #Copy R file to your directory and edit file paths to proper areas
   #This will take a long time (an hour or more)
-  $ Rscript PrediXcanDosages2GEMMABIMBAM.R
+  $ Rscript /home/angela/px_his_chol/GEMMA/BIMBAM/PrediXcanDosages2GEMMABIMBAM.R
     Read 67658 rows and 8635 (of 8635) columns from 2.867 GB file in 00:01:12
     
 5. Concatenate the chromosomes into one GEMMA input file
@@ -81,7 +81,7 @@ $command
     Reading Files ...
     ## number of total individuals = 8629
     ## number of analyzed individuals = 8623
-    ## number of covariates = 1
+    ## number of covariates = 11
     ## number of phenotypes = 1
     ## number of total SNPs = 7507
     ## number of analyzed SNPs = 7507
@@ -103,7 +103,8 @@ $command
     Start Eigen-Decomposition...
     pve estimate =0.263515
     se(pve) =0.0238711
-    Reading SNPs                                                    0.00%
+    Reading SNPs  ==================================================100.00%
+
 
   
   
