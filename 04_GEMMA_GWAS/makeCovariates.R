@@ -1,4 +1,4 @@
-library(datat.table)
+library(data.table)
 PCA <- fread("/home/angela/px_his_chol/QC/16_smartpca_input.evec", sep = " ") #smartPCA evec file
   #Warning message:
   #In fread("/home/angela/px_his_chol/QC/16_smartpca_input.evec", sep = " ") :
