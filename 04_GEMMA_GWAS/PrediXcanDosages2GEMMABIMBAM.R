@@ -3,7 +3,7 @@
 library(data.table)
 
 for(i in 1:22){
-  geno <- fread('zcat /home/angela/px_his_chol/Imputation/UMich/UMich_dosages/chr' %&% i %&% '.maf0.01.r20.8.dosage.txt.gz')
+  geno <- read.table('zcat /home/angela/px_his_chol/Imputation/UMich/UMich_dosages/chr' %&% i %&% '.maf0.01.r20.8.dosage.txt.gz')
   geno$V1 <- NULL
   geno$V3 <- NULL
   geno$V6 <- NULL #column for MAF
