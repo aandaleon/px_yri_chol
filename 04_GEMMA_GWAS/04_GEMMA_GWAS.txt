@@ -9,7 +9,7 @@ Legend:
 #note
 $command
     output
-*must edit filepaths within copied R script
+*must edit filepaths within script
 
 1. Unzip UMich data
   #-Pyour_password (change the your_password)
@@ -53,6 +53,7 @@ $command
   $ python /home/angela/px_his_chol/Imputation/UMich/UMich_vcf2px.py -i /home/angela/px_his_chol/Imputation/UMich/ -c 1 -r 1000g
 
 4*. Convert PrediXcan dosages into BIMBAM
+  #MAKE PYTHON VERSION OF THIS
   #Copy R file to your directory and edit file paths to proper areas
   #This will take a long time (an hour or more)
   $ Rscript /home/angela/px_his_chol/GEMMA/BIMBAM/PrediXcanDosages2GEMMABIMBAM.R
@@ -69,10 +70,11 @@ $command
 
 7*. Make annotation file
   #Adds location of SNP in the GEMMA GWAS
-  $ Rscript /home/angela/px_his_chol/GEMMA/anno/makeAnno.R
+  $ python /home/angela/px_his_chol/GEMMA/anno/makeAnno.py
   
 8*. Create a covariates file using QC PCAs
   #essential for admixed (Hispanic, African-American, etc.) populations
+  #below script uses SMARTPCA output
   $ Rscript /home/angela/px_his_chol/GEMMA/makeCovariates.R
   
 9. Run a preliminary association test in one chromosome
