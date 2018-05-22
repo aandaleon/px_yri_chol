@@ -1,3 +1,4 @@
+#Creates a SNP annotation file for GEMMA from PrediXcan dosages
 import gzip
 dosage_path = "/home/angela/px_his_chol/Imputation/UMich/UMich_dosages/"
 anno_path = "/home/angela/px_his_chol/GEMMA/anno/"
