@@ -34,6 +34,7 @@ $command
   #use pre-imputation data (post-imputation too resource-intensive to run)
   #fam file must have phenotypes in col 6
   #output must be in the folder you're currently in. If you put a path GEMMA gets angry and then runs the entire thing and then throws away the data.
+  #IF COHORT IS HIGHLY RELATED W SUBSTRUCTURE (ex. many Hispanic cohorts), SEE makeKINGGRM.R AND MAKE GRM USING THAT INSTEAD OF GEMMA
   $ gemma -bfile /home/angela/px_his_chol/Imputation/HRC-check/geno -gk 1 -o preImp
     Reading Files ...
     ## number of total individuals = 8629
