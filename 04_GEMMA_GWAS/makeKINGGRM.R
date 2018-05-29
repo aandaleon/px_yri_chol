@@ -1,4 +1,4 @@
-#before running this, make king.kin0 and king.kn using KING
+#before running this, make king.kin0 and king.kn using KING (http://people.virginia.edu/~wc9c/KING/manual.html)
 library(GENESIS)
 library(GWASTools)
 library(SNPRelate)
